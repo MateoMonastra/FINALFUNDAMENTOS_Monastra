@@ -1,9 +1,9 @@
-#include "ScreenManagements/ScreenManager.h"
+#include "ScreenManager.h"
 
 
 int main()
 {
-	asteroids::scenemanager::RunProgram();
+	RunProgram();
 
 	return 0;
 }

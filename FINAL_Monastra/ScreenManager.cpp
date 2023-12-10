@@ -30,7 +30,7 @@ void RunProgram()
 
 static void InitProgram()
 {
-	currentScreen = Screen::Menu;
+	currentScreen = Screen::Game;
 
 	srand(time(NULL));
 	
