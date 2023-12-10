@@ -16,6 +16,9 @@ struct ConsoleData
 	COORD coord;
 	CONSOLE_CURSOR_INFO cci;
 
-	int consoleWide = 30;
-	int consoleHeight = 30;
+	int gameConsoleWide = 30;
+	int gameConsoleHeight = 30;
+
+	int menuConsoleWide = 100;
+	int menuConsoleHeight = 55;
 };

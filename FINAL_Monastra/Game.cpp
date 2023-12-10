@@ -34,8 +34,8 @@ void InitGame()
 	
 	snake[0] = InitSnake(consoleData);
 	
-	SetConsoleSize(consoleData);
-	SetConsoleFont(10, 10);
+	SetConsoleSize(consoleData,0);
+	SetConsoleFont(24);
 
 	ResetFruit(consoleData,snake,fruit);
 }
@@ -52,8 +52,8 @@ void GameUpdate(Screen& currentScene)
 
 	if (isGameOver && hasWon)
 	{
-		consoleData.cursorPosition.Y = (consoleData.consoleHeight / 2);
-		consoleData.cursorPosition.X = (consoleData.consoleWide / 2) - win.length() / 2;
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2);
+		consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - win.length() / 2;
 		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
 		cout << win;
 
@@ -68,8 +68,8 @@ void GameUpdate(Screen& currentScene)
 	}
 	else if (isGameOver && !hasWon)
 	{
-		consoleData.cursorPosition.Y = (consoleData.consoleHeight / 2);
-		consoleData.cursorPosition.X = (consoleData.consoleWide / 2) - loose.length() / 2;
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2);
+		consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - loose.length() / 2;
 		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
 		cout << loose;
 
@@ -197,7 +197,7 @@ void ColitionCheck()
 		}
 	}
 
-	if (snake[0].pos.X < 1 || snake[0].pos.X > consoleData.consoleWide - 2 || snake[0].pos.Y < 1 || snake[0].pos.Y > consoleData.consoleHeight - 2)
+	if (snake[0].pos.X < 1 || snake[0].pos.X > consoleData.gameConsoleWide - 2 || snake[0].pos.Y < 1 || snake[0].pos.Y > consoleData.gameConsoleHeight - 2)
 	{
 		isGameOver = true;
 	}

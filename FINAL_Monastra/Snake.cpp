@@ -8,8 +8,8 @@ Snake InitSnake(ConsoleData consoleData)
 
 	snake.winingLength = 5;
 
-	snake.pos.X = consoleData.consoleWide / 2;
-	snake.pos.Y = consoleData.consoleHeight / 2;
+	snake.pos.X = consoleData.gameConsoleWide / 2;
+	snake.pos.Y = consoleData.gameConsoleHeight / 2;
 	snake.direction = 'A';
 
 	snake.currentLength = 1;
@@ -77,8 +77,8 @@ void ShowResult(ConsoleData& consoleData, Snake snake[])
 {
 	string points = "Total points: ";
 
-	consoleData.cursorPosition.Y = (consoleData.consoleHeight / 2) + 1;
-	consoleData.cursorPosition.X = (consoleData.consoleWide / 2) - (points.length() / 2) - 1;
+	consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2) + 1;
+	consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - (points.length() / 2) - 1;
 
 	SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
 

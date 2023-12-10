@@ -2,9 +2,11 @@
 
 #include "GameData.h"
 
-void SetConsoleSize(ConsoleData& consoleData);
+const int KEY_ENTER = 13;
 
-void SetConsoleFont(int wide, int height);
+void SetConsoleSize(ConsoleData& consoleData, bool isForMenu);
+
+void SetConsoleFont(int size);
 
 void DrawFrame(ConsoleData& consoleData, int delay);
 

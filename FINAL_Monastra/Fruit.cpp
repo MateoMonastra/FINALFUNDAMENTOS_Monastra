@@ -2,8 +2,8 @@
 
 void ResetFruit(ConsoleData& consoleData, Snake snake[], Fruit& fruit)
 {
-	fruit.pos.X = (rand() % (consoleData.consoleWide - 4)) + 2;
-	fruit.pos.Y = (rand() % (consoleData.consoleHeight - 4)) + 2;
+	fruit.pos.X = (rand() % (consoleData.gameConsoleWide - 4)) + 2;
+	fruit.pos.Y = (rand() % (consoleData.gameConsoleHeight - 4)) + 2;
 
 	for (int i = 0; i < snake[0].currentLength; i++)
 	{
@@ -11,8 +11,8 @@ void ResetFruit(ConsoleData& consoleData, Snake snake[], Fruit& fruit)
 		{
 			i = -1;
 
-			fruit.pos.X = (rand() % (consoleData.consoleWide - 4)) + 2;
-			fruit.pos.Y = (rand() % (consoleData.consoleHeight - 4)) + 2;
+			fruit.pos.X = (rand() % (consoleData.gameConsoleWide - 4)) + 2;
+			fruit.pos.Y = (rand() % (consoleData.gameConsoleHeight - 4)) + 2;
 		}
 	}
 

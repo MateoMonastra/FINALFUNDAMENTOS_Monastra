@@ -32,12 +32,12 @@ void RunProgram()
 
 static void InitProgram()
 {
-	currentScreen = Screen::Game;
+	currentScreen = Screen::Menu;
 
 	srand(time(NULL));
 	
-	//InitMenu();
-	InitGame();
+	InitMenu();
+	//InitGame();
 }
 
 static void Update()
