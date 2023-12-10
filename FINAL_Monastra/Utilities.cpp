@@ -94,8 +94,3 @@ void DrawFrame(ConsoleData& consoleData, int delay)
 		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
 	}
 }
-
-void DeltaTime()
-{
-	Sleep(100);
-}

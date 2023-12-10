@@ -13,8 +13,6 @@ void GetInput(Screen& currentScreen);
 
 void InitMenu()
 {
-
-
 	consoleDataMenu.hwnd = GetStdHandle(STD_OUTPUT_HANDLE);
 	GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &consoleDataMenu.cci);
 	consoleDataMenu.cci.bVisible = 0;
@@ -139,6 +137,7 @@ void GetInput(Screen& currentScreen)
 				{
 					system("cls");
 					currentScreen = Screen::Credits;
+					InitCredits();
 				}
 				else
 				{

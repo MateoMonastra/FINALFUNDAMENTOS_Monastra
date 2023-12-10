@@ -5,25 +5,41 @@
 #include "Snake.h"
 #include "Fruit.h"
 
+enum class Scenes
+{
+	Rules,
+	SelectDifficulty,
+	Playing,
+	GameOver,
+};
+
+Scenes currentScene;
 ConsoleData consoleData;
-Snake snake[50];
+
+const int MAX_SIZE = 90;
+Snake snake[MAX_SIZE];
 Fruit fruit;
 
+Difficulty difficulty;
+int difficultyOptions = 0;
 
-bool isGameOver = false;
-bool hasWon = false;
 bool collect = false;
+bool hasWon = false;
 
 string win = "You won!!!";
-string loose = "You Lose...";
+string lose = "You Lose...";
 
-static void GetInput();
+static void InitPlay();
+static void GetPlayInput();
+static void GetRulesInput();
+static void GetSelectDifficultyInput();
 static void ColitionCheck();
+static void DeltaTime();
 
 void InitGame()
 {
+	currentScene = Scenes::Rules;
 
-	isGameOver = false;
 	hasWon = false;
 	collect = false;
 
@@ -31,76 +47,194 @@ void InitGame()
 	GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &consoleData.cci);
 	consoleData.cci.bVisible = 0;
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &consoleData.cci);
-	
-	snake[0] = InitSnake(consoleData);
-	
-	SetConsoleSize(consoleData,0);
+
+	SetConsoleSize(consoleData, 0);
 	SetConsoleFont(24);
 
-	ResetFruit(consoleData,snake,fruit);
 }
 
-void GameUpdate(Screen& currentScene)
+static void InitPlay()
 {
+	snake[0] = InitSnake(consoleData, difficulty);
+	ResetFruit(consoleData, snake, fruit);
+}
+
+void GameUpdate(Screen& currentScreen)
+{
+	if (currentScene == Scenes::Rules)
+	{
+		GetRulesInput();
+	}
+	else if (currentScene == Scenes::SelectDifficulty)
+	{
+		GetSelectDifficultyInput();
+	}
+	else if (currentScene == Scenes::Playing)
+	{
 		DeltaTime();
-		
+
 		UpdateSnake(consoleData, snake);
 
 		ColitionCheck();
-		
-		GetInput();
 
-	if (isGameOver && hasWon)
-	{
-		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2);
-		consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - win.length() / 2;
-		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
-		cout << win;
-
-		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
-
-		ShowResult(consoleData, snake);
-
-		cin.get();
-
-		system("cls");
-		SetConsoleTextAttribute(consoleData.hwnd, 0);
+		GetPlayInput();
 	}
-	else if (isGameOver && !hasWon)
+	else if (currentScene == Scenes::GameOver)
 	{
-		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2);
-		consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - loose.length() / 2;
-		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
-		cout << loose;
 
-		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
 
-		ShowResult(consoleData,snake);
-
-		cin.get();
-
-		system("cls");
-		SetConsoleTextAttribute(consoleData.hwnd, 0);
 	}
 }
 
 void GameDrawing()
 {
-	DrawSnake(consoleData,snake);
+	if (currentScene == Scenes::Rules)
+	{
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 9);
+		consoleData.cursorPosition.X = (1);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		cout << "W: Move the snake upward";
 
-	DrawFruit(consoleData,fruit);
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 9 * 2);
+		consoleData.cursorPosition.X = (1);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		cout << "A: Move the snake to the left";
 
-	if (isGameOver)
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 9 * 3);
+		consoleData.cursorPosition.X = (1);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		cout << "S: Move the snake downward";
+
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 9 * 4);
+		consoleData.cursorPosition.X = (1);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		cout << "D:Move the snake to the right";
+
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 9 * 6);
+		consoleData.cursorPosition.X = (1);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		cout << "If you collide with any wall" << endl;
+		cout << endl << " or your own tail" << endl;
+		cout << endl << " you will lose the game.";
+
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight - 2);
+		consoleData.cursorPosition.X = (1);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		cout << "PRESS ENTER TO PASS THE PAGE ";
+	}
+	else if (currentScene == Scenes::SelectDifficulty)
+	{
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 8);
+		consoleData.cursorPosition.X = (6);
+
+		SetConsoleTextAttribute(consoleData.hwnd, 3);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		cout << "SELECT DIFFICULTY ";
+
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 8 + 2);
+		consoleData.cursorPosition.X = (6);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		cout << "  WITH W AND S ";
+
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 8 + 4);
+		consoleData.cursorPosition.X = (6);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		cout << "THEN USE ENTER: ";
+
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 5 * 2);
+		consoleData.cursorPosition.X = (6);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		SetConsoleTextAttribute(consoleData.hwnd, FOREGROUND_GREEN);
+
+		if (difficultyOptions == 0)
+		{
+			cout << "EASY (15 POINTS) <<";
+		}
+		else
+		{
+			cout << "EASY (15 POINTS)    ";
+		}
+
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 5 * 3);
+		consoleData.cursorPosition.X = (6);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		SetConsoleTextAttribute(consoleData.hwnd, FOREGROUND_INTENSITY);
+
+		if (difficultyOptions == 1)
+		{
+			cout << "MEDIUM (45 POINTS) <<";
+		}
+		else
+		{
+			cout << "MEDIUM (45 POINTS)    ";
+		}
+		consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 5 * 4);
+		consoleData.cursorPosition.X = (6);
+		SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+		SetConsoleTextAttribute(consoleData.hwnd, FOREGROUND_RED);
+
+		if (difficultyOptions == 2)
+		{
+			cout << "HARD (65 POINTS) <<";
+		}
+		else
+		{
+			cout << "HARD (65 POINTS)    ";
+		}
+
+	}
+	else if (currentScene == Scenes::Playing)
+	{
+		DrawFruit(consoleData, fruit);
+
+		SetConsoleTextAttribute(consoleData.hwnd, FOREGROUND_BLUE);
+
+		DrawSnake(consoleData, snake);
+
+		SetConsoleTextAttribute(consoleData.hwnd, 8);
+
+		DrawFrame(consoleData, 0);
+	}
+	else if (currentScene == Scenes::GameOver)
 	{
 		SetConsoleTextAttribute(consoleData.hwnd, FOREGROUND_RED);
+
+		DrawSnake(consoleData, snake);
+
+		if (hasWon)
+		{
+			consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2);
+			consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - win.length() / 2;
+			SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+			cout << win;
+
+			SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+
+			ShowResult(consoleData, snake);
+
+			cin.get();
+
+			system("cls");
+		}
+		else
+		{
+			consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2);
+			consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - lose.length() / 2;
+			SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+			cout << lose;
+
+			SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+
+			ShowResult(consoleData, snake);
+
+			cin.get();
+
+			system("cls");
+		}
 	}
-	
-	SetConsoleTextAttribute(consoleData.hwnd, 8);
-	
-	DrawFrame(consoleData, 0); 
 }
 
-void GetInput()
+static void GetPlayInput()
 {
 	bool reverse = false;
 
@@ -158,7 +292,76 @@ void GetInput()
 	}
 }
 
-void ColitionCheck()
+static void GetRulesInput()
+{
+	if (_kbhit())
+	{
+		char input = toupper(_getch());
+
+		if (input == (char)KEY_ENTER)
+		{
+			currentScene = Scenes::SelectDifficulty;
+			system("cls");
+		}
+	}
+}
+
+static void GetSelectDifficultyInput()
+{
+	if (_kbhit())
+	{
+		char input = toupper(_getch());
+
+		if (input == 'W' || input == 'S' || input == (char)KEY_ENTER)
+		{
+			switch (input)
+			{
+			case 'S':
+
+				difficultyOptions++;
+
+				if (difficultyOptions > 2)
+				{
+					difficultyOptions = 2;
+				}
+
+				break;
+
+			case 'W':
+				difficultyOptions--;
+
+				if (difficultyOptions < 0)
+				{
+					difficultyOptions = 0;
+				}
+				break;
+
+			case (char)KEY_ENTER:
+
+				if (difficultyOptions == 0)
+				{
+					difficulty = Difficulty::EASY;
+				}
+				else if (difficultyOptions == 1)
+				{
+					difficulty = Difficulty::MEDIUM;
+				}
+				else if (difficultyOptions == 2)
+				{
+					difficulty = Difficulty::HARD;
+				}
+
+				system("cls");
+				currentScene = Scenes::Playing;
+				InitPlay();
+				break;
+			}
+		}
+
+	}
+}
+
+static void ColitionCheck()
 {
 	if ((snake[0].pos.X == fruit.pos.X) && (snake[0].pos.Y == fruit.pos.Y))
 	{
@@ -176,7 +379,7 @@ void ColitionCheck()
 		if (snake[0].currentLength == snake[0].winingLength)
 		{
 			hasWon = true;
-			isGameOver = true;
+			currentScene = Scenes::GameOver;
 		}
 	}
 
@@ -192,13 +395,29 @@ void ColitionCheck()
 	{
 		if (snake[0].pos.X == snake[i].pos.X && snake[0].pos.Y == snake[i].pos.Y)
 		{
-			isGameOver = true;
+			currentScene = Scenes::GameOver;
 			break;
 		}
 	}
 
 	if (snake[0].pos.X < 1 || snake[0].pos.X > consoleData.gameConsoleWide - 2 || snake[0].pos.Y < 1 || snake[0].pos.Y > consoleData.gameConsoleHeight - 2)
 	{
-		isGameOver = true;
+		currentScene = Scenes::GameOver;
+	}
+}
+
+static void DeltaTime()
+{
+	if (difficulty == Difficulty::EASY)
+	{
+		Sleep(130);
+	}
+	else if (difficulty == Difficulty::MEDIUM)
+	{
+		Sleep(100);
+	}
+	else if (difficulty == Difficulty::HARD)
+	{
+		Sleep(70);
 	}
 }

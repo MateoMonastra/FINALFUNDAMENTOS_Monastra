@@ -23,8 +23,8 @@ void RunProgram()
 
 	while (currentScreen != Screen::Exit)
 	{
-		Draw();
 		Update();
+		Draw();
 	}
 
 	Close();

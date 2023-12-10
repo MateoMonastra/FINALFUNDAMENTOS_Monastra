@@ -2,11 +2,22 @@
 
 #include "Utilities.h"
 
-Snake InitSnake(ConsoleData consoleData)
+Snake InitSnake(ConsoleData consoleData, Difficulty difficulty)
 {
 	Snake snake;
 
-	snake.winingLength = 5;
+	if (difficulty == Difficulty::EASY)
+	{
+	snake.winingLength = 15;
+	}
+	else if (difficulty == Difficulty::MEDIUM)
+	{
+	snake.winingLength = 45;
+	}
+	else
+	{
+	snake.winingLength = 65;
+	}
 
 	snake.pos.X = consoleData.gameConsoleWide / 2;
 	snake.pos.Y = consoleData.gameConsoleHeight / 2;
@@ -64,7 +75,6 @@ void UpdateSnake(ConsoleData& consoleData, Snake snake[])
 
 void DrawSnake(ConsoleData& consoleData, Snake snake[])
 {
-	SetConsoleTextAttribute(consoleData.hwnd, FOREGROUND_BLUE);
 
 	for (int i = 0; i < snake[0].currentLength; i++)
 	{

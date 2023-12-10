@@ -23,7 +23,14 @@ enum class Directions
 	RIGHT = 'D'
 };
 
-Snake InitSnake(ConsoleData consoleData);
+enum class Difficulty
+{
+EASY,
+MEDIUM,
+HARD
+};
+
+Snake InitSnake(ConsoleData consoleData, Difficulty difficulty);
 void UpdateSnake(ConsoleData& consoleData, Snake snake[]);
 void DrawSnake(ConsoleData& consoleData, Snake snake[]);
 void ShowResult(ConsoleData& consoleData, Snake snake[]);
