@@ -5,7 +5,9 @@
 #include <time.h>
 
 #include "Screen.h"
-
+#include "Game.h"
+#include "Menu.h"
+#include "Credits.h"
 
 Screen currentScreen;
 
@@ -21,8 +23,8 @@ void RunProgram()
 
 	while (currentScreen != Screen::Exit)
 	{
-		Update();
 		Draw();
+		Update();
 	}
 
 	Close();
@@ -35,6 +37,7 @@ static void InitProgram()
 	srand(time(NULL));
 	
 	//InitMenu();
+	InitGame();
 }
 
 static void Update()
@@ -43,13 +46,13 @@ static void Update()
 	switch (currentScreen)
 	{
 	case Screen::Menu:
-		//MenuUpdate(currentScreen);
+		MenuUpdate(currentScreen);
 		break;
 	case Screen::Game:
-		//GameUpdate(currentScreen);
+		GameUpdate(currentScreen);
 		break;
 	case Screen::Credits:
-		//CreditsUpdate(currentScreen);
+		CreditsUpdate(currentScreen);
 		break;
 	case Screen::Exit:
 		Close();
@@ -66,13 +69,13 @@ static void Draw()
 	switch (currentScreen)
 	{
 	case Screen::Menu:
-		//MenuDrawing();
+		MenuDrawing();
 		break;
 	case Screen::Game:
-		//DrawGame();
+		GameDrawing();
 		break;
 	case Screen::Credits:
-		//CreditsDrawing();
+		CreditsDrawing();
 		break;
 	default:
 		break;

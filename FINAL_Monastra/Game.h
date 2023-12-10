@@ -3,4 +3,4 @@
 
 void InitGame();
 void GameUpdate(Screen& currentScene);
-void DrawGame();
+void GameDrawing();
