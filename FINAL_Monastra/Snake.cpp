@@ -23,7 +23,7 @@ Snake InitSnake(ConsoleData consoleData, Difficulty difficulty)
 	snake.pos.Y = consoleData.gameConsoleHeight / 2;
 	snake.direction = 'A';
 
-	snake.currentLength = 1;
+	snake.currentLength = 2;
 	snake.landedFruits = 0;
 	snake.catchedFruits = 0;
 
@@ -87,7 +87,7 @@ void ShowResult(ConsoleData& consoleData, Snake snake[])
 {
 	string points = "Total points: ";
 
-	consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2) + 1;
+	consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2) - 8;
 	consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - (points.length() / 2) - 1;
 
 	SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);

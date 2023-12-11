@@ -33,11 +33,11 @@ void RunProgram()
 static void InitProgram()
 {
 	currentScreen = Screen::Menu;
-
-	srand(time(NULL));
 	
+	srand(time(NULL));
+
 	InitMenu();
-	//InitGame();
+	
 }
 
 static void Update()
@@ -86,3 +86,4 @@ static void Close()
 {
 	exit;
 }
+

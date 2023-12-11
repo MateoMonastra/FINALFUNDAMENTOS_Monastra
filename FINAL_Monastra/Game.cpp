@@ -4,6 +4,7 @@
 
 #include "Snake.h"
 #include "Fruit.h"
+#include "Menu.h"
 
 enum class Scenes
 {
@@ -21,7 +22,9 @@ Snake snake[MAX_SIZE];
 Fruit fruit;
 
 Difficulty difficulty;
+
 int difficultyOptions = 0;
+int gameOverOptions = 0;
 
 bool collect = false;
 bool hasWon = false;
@@ -33,6 +36,7 @@ static void InitPlay();
 static void GetPlayInput();
 static void GetRulesInput();
 static void GetSelectDifficultyInput();
+static void GetGameOverInput(Screen& currentScreen);
 static void ColitionCheck();
 static void DeltaTime();
 
@@ -81,8 +85,7 @@ void GameUpdate(Screen& currentScreen)
 	}
 	else if (currentScene == Scenes::GameOver)
 	{
-
-
+		GetGameOverInput(currentScreen);
 	}
 }
 
@@ -197,14 +200,14 @@ void GameDrawing()
 	}
 	else if (currentScene == Scenes::GameOver)
 	{
-		SetConsoleTextAttribute(consoleData.hwnd, FOREGROUND_RED);
-
-		DrawSnake(consoleData, snake);
 
 		if (hasWon)
 		{
-			consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2);
-			consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - win.length() / 2;
+			SetConsoleTextAttribute(consoleData.hwnd, FOREGROUND_BLUE);
+			DrawSnake(consoleData, snake);
+		
+			consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2) - 10;
+			consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - lose.length() / 2;
 			SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
 			cout << win;
 
@@ -212,13 +215,37 @@ void GameDrawing()
 
 			ShowResult(consoleData, snake);
 
-			cin.get();
+			consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2);
+			consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - lose.length() / 2 - 3;
+			SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
 
-			system("cls");
+			if (gameOverOptions == 0)
+			{
+				cout << "RETURN MENU <<";
+			}
+			else
+			{
+				cout << "RETURN MENU   ";
+			}
+
+			consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2) + 5;
+			SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+
+			if (gameOverOptions == 1)
+			{
+				cout << "PLAY AGAIN <<";
+			}
+			else
+			{
+				cout << "PLAY AGAIN   ";
+			}
 		}
 		else
 		{
-			consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2);
+			SetConsoleTextAttribute(consoleData.hwnd, FOREGROUND_RED);
+			DrawSnake(consoleData, snake);
+			
+			consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2) - 10;
 			consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - lose.length() / 2;
 			SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
 			cout << lose;
@@ -227,9 +254,30 @@ void GameDrawing()
 
 			ShowResult(consoleData, snake);
 
-			cin.get();
+			consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2);
+			consoleData.cursorPosition.X = (consoleData.gameConsoleWide / 2) - lose.length() / 2 - 3;
+			SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
 
-			system("cls");
+			if (gameOverOptions == 0)
+			{
+				cout << "RETURN MENU <<";
+			}
+			else
+			{
+				cout << "RETURN MENU   ";
+			}
+
+			consoleData.cursorPosition.Y = (consoleData.gameConsoleHeight / 2) + 5;
+			SetConsoleCursorPosition(consoleData.hwnd, consoleData.cursorPosition);
+
+			if (gameOverOptions == 1)
+			{
+				cout << "PLAY AGAIN <<";
+			}
+			else
+			{
+				cout << "PLAY AGAIN   ";
+			}
 		}
 	}
 }
@@ -354,6 +402,56 @@ static void GetSelectDifficultyInput()
 				system("cls");
 				currentScene = Scenes::Playing;
 				InitPlay();
+				break;
+			}
+		}
+
+	}
+}
+
+static void GetGameOverInput(Screen& currentScreen)
+{
+	if (_kbhit())
+	{
+		char input = toupper(_getch());
+
+		if (input == 'W' || input == 'S' || input == (char)KEY_ENTER)
+		{
+			switch (input)
+			{
+			case 'S':
+
+				gameOverOptions++;
+
+				if (gameOverOptions > 1)
+				{
+					gameOverOptions = 1;
+				}
+
+				break;
+
+			case 'W':
+				gameOverOptions--;
+
+				if (gameOverOptions < 0)
+				{
+					gameOverOptions = 0;
+				}
+				break;
+
+			case (char)KEY_ENTER:
+
+				if (gameOverOptions == 0)
+				{
+					currentScreen = Screen::Menu;
+					InitMenu();
+				}
+				else if (gameOverOptions == 1)
+				{
+					currentScene = Scenes::SelectDifficulty;
+				}
+
+				system("cls");
 				break;
 			}
 		}

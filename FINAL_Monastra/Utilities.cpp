@@ -4,8 +4,8 @@ void SetConsoleSize(ConsoleData& consoleData, bool isForMenu)
 {
 	if (!isForMenu)
 	{
-	consoleData.coord.X = consoleData.gameConsoleWide; 
-	consoleData.coord.Y = consoleData.gameConsoleHeight;
+		consoleData.coord.X = consoleData.gameConsoleWide;
+		consoleData.coord.Y = consoleData.gameConsoleHeight;
 	}
 	else
 	{
